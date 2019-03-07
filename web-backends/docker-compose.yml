@@ -1,0 +1,56 @@
+version: "2.2"
+
+services:
+   web:
+      container_name: web-server
+      restart: always
+      build: ./web
+      expose:
+        - "8077"
+      volumes:
+        - ./web:/usr/src/app
+      command: /usr/local/bin/gunicorn website.wsgi:application -w 2 -b :8077
+      networks:
+          customize_net:
+            ipv4_address: 192.168.2.223
+
+   nginx:
+      container_name: nginx
+      restart: always
+      build: ./nginx-container/
+      ports:
+        - "1080:80"
+      volumes:
+        - .:/home/django/2018-12-11/
+        - /srv/docker/logs/nginx:/var/log/nginx/
+      networks:
+          customize_net:
+            ipv4_address: 192.168.2.99
+
+   mysql:
+      container_name: mysql-server
+      image: 'mysql:5.7'
+      volumes:
+        - /srv/docker/mysqldata2:/var/lib/mysql
+        - ./mysql/mysql.conf.d:/etc/mysql/mysql.conf.d
+      restart: always
+      expose:
+        - "3306"
+      environment:
+       - MYSQL_USER=admin007
+       - MYSQL_PASSWORD=myadmin@816
+       - MYSQL_DATABASE=qydldb
+       - MYSQL_ROOT_PASSWORD=test@1q2w2e4R
+
+      networks:
+        customize_net:
+          ipv4_address: 192.168.2.101
+
+networks:
+  customize_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
+

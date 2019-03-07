@@ -1,0 +1,22 @@
+--index-url https://pypi.tuna.tsinghua.edu.cn/simple
+# --extra-index-url http://mirrors.aliyun.com/pypi/simple/
+
+appdirs==1.4.3
+Django==1.11.5
+django-compressor==2.2
+PyMySQL==0.7.11
+requests==2.18.4
+django-cors-headers==2.1.0
+pymongo==3.5.1
+django-rest-framework==0.1.0
+djangorestframework==3.8.2
+djangorestframework-jwt==1.11.0
+gunicorn==19.3.0
+
+#django-redis==4.9.0
+redis==2.10.6
+
+
+## 2019-2-27
+PyExecJS==1.5.1
+
