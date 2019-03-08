@@ -1,0 +1,113 @@
+version: "2.2"
+
+services:
+  web:
+    container_name: python-web
+    restart: always
+    build: ./web
+    privileged: true
+    expose:
+      - "8000"
+    volumes:
+      - ./web:/usr/src/app
+      - /home/:/home
+      - /opt:/opt
+      - /home/django/web/collect_static:/usr/src/app/collect_static
+
+    working_dir: /usr/src/app
+    command: /usr/local/bin/gunicorn website.wsgi:application -w 2 -b :8000
+    networks:
+        customize_net:
+          ipv4_address: 192.168.38.17
+
+  modsecurity:
+      container_name: modsecurity
+      image: registry.cn-beijing.aliyuncs.com/actanble/modsecurity:cent7-sshd
+      restart: always
+      privileged: true
+      ports:
+        - "6922:22"
+        - "6980:80"
+        - "9980:9980"
+      volumes:
+        - /opt/nginx:/etc/nginx
+        - /home/log:/var/log
+        - /home/site:/home/site
+        - /home/django:/home/django
+      networks:
+        customize_net:
+          ipv4_address: 192.168.38.169
+
+  postgresql:
+    restart: always
+    image: sameersbn/postgresql:10
+    volumes:
+     - /srv/docker/data/postgresql:/var/lib/postgresql:Z
+    environment:
+     - DB_USER=admin007
+     - DB_PASS=myadmin@816
+     - DB_NAME=djsite
+     - DB_EXTENSION=pg_trgm
+    ports:
+      - "5432:5432"
+    networks:
+      customize_net:
+        ipv4_address: 192.168.38.154
+
+  redis:
+    container_name: redis-server
+    restart: always
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - /srv/docker/data/redisdata:/data
+    networks:
+      customize_net:
+        ipv4_address: 192.168.38.163
+
+  mysql:
+    container_name: mysql-server
+    image: 'sameersbn/mysql:5.7.22-1'
+    restart: always
+    container_name: mysql
+    volumes:
+      - /srv/docker/data/mysqldata:/var/lib/mysql
+    ports:
+      - '3306:3306'
+    environment:
+     - DB_USER=admin007
+     - DB_PASS=myadmin@816
+     - DB_NAME=djsite
+     - DB_REMOTE_ROOT_NAME=root
+     - DB_REMOTE_ROOT_PASS=1q2w3e4R@ac
+
+    networks:
+      customize_net:
+        ipv4_address: 192.168.38.133
+
+  mongodb:
+    container_name: mongo
+    image: 'mongo:3.6'
+    ports:
+      - "27017:27017"
+    volumes:
+      - /srv/docker/data/mongodb_data:/data
+    networks:
+      customize_net:
+        ipv4_address: 192.168.38.127
+
+volumes:
+  data:
+    driver: local
+
+networks:
+  customize_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.38.0/24
+
+
+
