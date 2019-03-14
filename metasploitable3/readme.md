@@ -11,4 +11,8 @@
 
 
 ## 开始实验
+- 参考官方说明爆露出来的靶场和基础环境
+- httpsgithub.comrapid7metasploitable3wikiVulnerabilities
 
+## 攻击集合
+- msf 主要

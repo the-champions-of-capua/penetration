@@ -1,4 +1,4 @@
-## Vagrant 基础命令学习
+﻿## Vagrant 基础命令学习
 
 ### 打造自己的vbox
 - 1, 打开VitualBox6.0 + Vagrant2.2 + Packer1.5
@@ -68,4 +68,14 @@ metadata.json
 - setx VAGRANT_HOME "a://vagrant.d/"
 - setx VAGRANT_HOME "a://vagrant.d/" /M （系统变量）
 - VBoxManage setproperty machinefolder  /mnt/vagrant_fs/'Virtualbox\ VMS'
+- `vagrant plugin install vagrant-vbguest`
+
+### 最好安装插件解决部分兼容问题
+- `vagrant plugin install vagrant-vbguest` 很多地方需要这个
+```
+将 G:\HashiCorp\Vagrant\embedded\gems 下所有文件中的 
+https://rubygems.org 
+替换为： 
+https://gems.ruby-china.org
+```
 
